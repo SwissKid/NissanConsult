@@ -6,3 +6,5 @@ For those of you brave enough to try, I made this work with a USB serial cable t
 
 
 Got a lot of inspiration from https://github.com/Crim/Arduino-Nissan-Consult-Library . If you want better code, look at his! It's a lot better.....
+
+Licensed under the GPLv2 because it worked at the time. If it actaully prevents you from using this well, I'm open to relicensing.
