@@ -14,18 +14,26 @@ ser = serial.Serial(
 	stopbits=serial.STOPBITS_ONE,
 	bytesize=serial.EIGHTBITS
 	)
+#I don't even use this...
 def Reed():
     while 1:
 	if ser.inWaiting():
-	    print ser.read(1).decode('hex')
+	    print ser.read(1).encode('hex')
 	else:
 	    waittime = raw_input("Press Enter to Continue")
+ser.write(shutup)
+while 1:
+    if ser.inWaiting():
+	if ser.read(1).encode('hex') == "cf":
+	    break
+    else:
+	time.sleep(0.1)
+	if not ser.inWaiting():
+	    break
 ser.close()
 ser.open()
-
 ser.write(init)
 resp =  ser.read(1).encode('hex')
-#print resp.encode('hex')
 if resp == "10":
     print "INITIALIZATION COMPLETE"
 elif resp == "00":
@@ -56,6 +64,7 @@ while 1:
 	if not ser.inWaiting():
 	    break
 m = int(response[0], 16) - 1
+starterror = ""
 if m == 1:
     if response[m] == "55":
 	print "NO ERRORS, CONGRATS"
@@ -63,6 +72,7 @@ if m == 1:
 	print "You recieved ",m," error codes! They are:"
 	while m > 0:
 	    print response[m]
+	    starterror += str(response[m])
 	    m = m - 1
 	print " THOSE ARE YOUR ERROR CODES"
 
@@ -116,6 +126,16 @@ print "LETS TRY LIVE READING"
 #    print "Current injector timing is ", injtim, " mS"
 #ser.write("\x5a\x01\x5a\x08\x5a\x05\xf0")
 ser.write("\x5a\x01\x5a\x08\x5a\x00\x5a\x05\x5a\x04\x5a\x14\x5a\x15\x5a\x0b\xf0")
+##NOTES
+#x01 = Tach MSB
+#x02 = Tach LSB
+#x04 = MAF MSB
+#x05 = MAF LSB
+#x08 = Coolant Temp
+#x0b = Vehicle Speed
+#x14 = Injector Pulse Time MSB
+#x15 = Injector Pulse Time LSB
+#Need to precede each streaming item with \x5a
 #ser.write("\x5a\x01\x5a\x08\x5a\x15\xf0")
 while 1:
     if ser.read(1).encode('hex') == "ff":
@@ -148,3 +168,5 @@ while 1:
     print "Inj Timing: ", injtim, " mS"
     print "MAF Voltage: ", mafvolt, "mV"
     print "Speed: ", speedo," mph"
+    print "Start Errors: ", starterrors
+    #Need to figure out how to update the errors every so often for when i get NEW check engine lights
