@@ -46,7 +46,9 @@ else:
     elif resp == "00":
         print "ALREADY INITIALIZED"
     else:
+        print "Well, what we did recieve was", resp
         print "WHAT THE HELL THIS SHIT IS BROKE"
+        raw_input()
         quit()
 print "READIN THEM ERROR CODES"
 ser.write(dtc)
