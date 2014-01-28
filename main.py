@@ -8,19 +8,20 @@ dtc = "\xd1\xf0"
 shutup = "\x30\xf0" 
 
 ser = serial.Serial(
-        port='/dev/ttyUSB0',
-        baudrate=9600,
-        parity=serial.PARITY_NONE,
-        stopbits=serial.STOPBITS_ONE,
-        bytesize=serial.EIGHTBITS
-        )
+    port='/dev/ttyUSB0',
+    baudrate=9600,
+    parity=serial.PARITY_NONE,
+    stopbits=serial.STOPBITS_ONE,
+    bytesize=serial.EIGHTBITS
+)
 #I don't even use this...
-def Reed():
-    while 1:
-        if ser.inWaiting():
-            print ser.read(1).encode('hex')
-        else:
-            waittime = raw_input("Press Enter to Continue")
+#def Reed():
+#    while 1:
+#        if ser.inWaiting():
+#            print ser.read(1).encode('hex')
+#        else:
+#            waittime = raw_input("Press Enter to Continue")
+
 ser.close()
 ser.open()
 ser.write(init)
@@ -48,7 +49,7 @@ else:
     else:
         print "Well, what we did recieve was", resp
         print "WHAT THE HELL THIS SHIT IS BROKE"
-        raw_input()
+        time.sleep(15)
         quit()
 print "READIN THEM ERROR CODES"
 ser.write(dtc)
@@ -65,18 +66,21 @@ while 1:
         if not ser.inWaiting():
             break
 m = int(response[0], 16) - 1
+time.sleep(4)
 starterror = ""
 if m == 1:
     if response[m] == "55":
         print "NO ERRORS, CONGRATS"
     else:
         print "You recieved ",m," error codes! They are:"
+        time.sleep(2)
         while m > 0:
             print response[m]
             starterror += str(response[m])
             m = m - 1
         print " THOSE ARE YOUR ERROR CODES"
 
+time.sleep(4)
 #ser.write("\xd0\xf0")
 #while 1:
 #    if ser.read(1).encode('hex') == "ff":
