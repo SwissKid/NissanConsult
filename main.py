@@ -150,7 +150,7 @@ while 1:
     while 1:
         if mainrep[0] == "08":
             break
-       else:
+        else:
            del mainrep[0]
     revlsb = int(mainrep[3], 16) * 12.5 * 256
     rev = int(mainrep[1], 16) * 12.5 + revlsb
